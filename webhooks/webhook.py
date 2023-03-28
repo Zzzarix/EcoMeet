@@ -9,5 +9,5 @@ WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
 
 import pathlib, os
 
-CERT_PATH = os.path.join(pathlib.Path(__file__).resolve().parent, 'certs', 'beautique_cert.pem')
-CERT_KEY_PATH = os.path.join(pathlib.Path(__file__).resolve().parent, 'certs', 'beautique_pkey.pem')
+CERT_PATH = os.path.join(pathlib.Path(__file__).resolve().parent, 'certs', 'cert.pem')
+CERT_KEY_PATH = os.path.join(pathlib.Path(__file__).resolve().parent, 'certs', 'pkey.pem')
