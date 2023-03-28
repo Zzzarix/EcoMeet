@@ -1,0 +1,10 @@
+.idea
+venv
+.vscode
+
+*/__pycache__
+*.pyc
+
+# __*.*
+
+!__init__.py

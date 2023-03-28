@@ -1,0 +1,25 @@
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+import logging as logger
+from ..config import config
+
+
+_client = AsyncIOMotorClient(config['db']['uri'], serverSelectionTimeoutMS=config['db']['timeout'])
+_db: AsyncIOMotorDatabase = _client[config['db']['name']]
+
+
+class DatabaseConnectError(Exception):
+    pass
+
+
+def close_db_conn():
+    _client.close()
+
+
+async def check_db_conn():
+    logger.info('trying to connect to database')
+    try:
+        await _client.server_info()
+    except Exception as e:
+        logger.error(e)
+        raise DatabaseConnectError
+    logger.info('database connection was inited')
