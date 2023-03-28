@@ -1,6 +1,6 @@
 config = {
     'bot': {
-        'token': '5964064481:AAHGTWvcKzZsUSD0g4MxRXUPzukxVsutP8k',
+        'token': '6081530202:AAEPM3vmrHIyFYG5k6VfSGaf4hdOCa2AsKY',
         'admins': [945482940, 1640897457]
     },
 
