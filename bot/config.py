@@ -5,7 +5,7 @@ config = {
     },
 
     'db': {
-        'uri': 'mongodb://root:root@mongo:27000',
+        'uri': 'mongodb://root:root@localhost:27017/',
         'timeout': 1000,
         'name': 'EcoMeet'
     },
