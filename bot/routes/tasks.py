@@ -181,7 +181,7 @@ async def answer_task(obj, state: FSMContext):
             await obj.answer(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
     elif isinstance(obj, types.CallbackQuery):
         if task:
-            await obj.answer(f"Ваше текущее задание:\n\n{task.text}\n\nДля подтверждения выполнения задания отправьте медиа/документы/текстовое описание <b>Одним Сообщением</b>", reply_markup=answer_kb())
+            await obj.message.edit_text(f"Ваше текущее задание:\n\n{task.text}\n\nДля подтверждения выполнения задания отправьте медиа/документы/текстовое описание <b>Одним Сообщением</b>", reply_markup=answer_kb())
             await obj.answer()
         else:
             await obj.message.edit_text(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
