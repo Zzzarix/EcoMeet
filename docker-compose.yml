@@ -4,6 +4,7 @@ services:
   mongo:
     container_name: 'mongo'
     image: mongo:latest
+    command: mongod --quiet
     environment:
       MONGO_INITDB_ROOT_USERNAME: 'root'
       MONGO_INITDB_ROOT_PASSWORD: 'root'
