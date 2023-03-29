@@ -22,7 +22,8 @@ tasks_router = Router()
 
 @tasks_router.message(Command(commands='tasks', commands_ignore_case=True))
 @tasks_router.callback_query(text='tasks')
-async def menu(obj):
+async def menu(obj, state: FSMContext):
+    await state.set_state(None)
     flag = await check_user(obj.from_user.id)
     if not flag:
         return
@@ -78,7 +79,8 @@ async def addpoints(m: types.Message):
 
 @tasks_router.message(Command(commands='tasks', commands_ignore_case=True))
 @tasks_router.callback_query(text='tasks:new')
-async def categories(obj):
+async def categories(obj, state: FSMContext):
+    await state.set_state(None)
     flag = await check_user(obj.from_user.id)
     if not flag:
         return
@@ -116,15 +118,14 @@ async def tasks(call: types.CallbackQuery):
 
     random.shuffle(tasks)
     for t in tasks:
-        if t in user.completed_tasks:
-            continue
+        if not t.id in user.completed_tasks:
 
-        user.task = t.id
-        await db.update_user(user)
-        
-        await call.message.edit_text(f"Вы выбрали задание:\n\n{t.text}", reply_markup=task_chose_kb())
-        await call.answer()
-        break
+            user.task = t.id
+            await db.update_user(user)
+            
+            await call.message.edit_text(f"Вы выбрали задание:\n\n{t.text}", reply_markup=task_chose_kb())
+            await call.answer()
+            return
 
     await call.message.edit_text(f"В этой категории пока нет заданий для выполнения", reply_markup=task_not_chose_kb())
     await call.answer()
@@ -132,24 +133,36 @@ async def tasks(call: types.CallbackQuery):
 
 @tasks_router.message(Command(commands='mytask', commands_ignore_case=True))
 @tasks_router.callback_query(text='tasks:current')
-async def current_task(obj):
+async def current_task(obj, state: FSMContext):
+    await state.set_state(None)
     flag = await check_user(obj.from_user.id)
     if not flag:
         return
 
     user = await db.get_user(obj.from_user.id)
     task = await db.get_task(user.task)
+    if not task:
+        cats = await db.get_categories()
 
     if isinstance(obj, types.Message):
-        await obj.answer(f"Ваше текущее задание:\n\n{task.text}", reply_markup=current_task_kb())
+        if task:
+            await obj.answer(f"Ваше текущее задание:\n\n{task.text}", reply_markup=current_task_kb())
+        else:
+            await obj.answer('Для начала, получите задание')
+            await obj.answer(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
     elif isinstance(obj, types.CallbackQuery):
-        await obj.message.edit_text(f"Ваше текущее задание:\n\n{task.text}", reply_markup=current_task_kb())
-        await obj.answer()
+        if task:
+            await obj.message.edit_text(f"Ваше текущее задание:\n\n{task.text}", reply_markup=current_task_kb())
+            await obj.answer()
+        else:
+            await obj.message.edit_text(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
+            await obj.answer('Для начала, получите задание')
 
 
 @tasks_router.message(Command(commands='answer', commands_ignore_case=True))
 @tasks_router.callback_query(text='tasks:answer')
 async def answer_task(obj, state: FSMContext):
+    await state.set_state(None)
     flag = await check_user(obj.from_user.id)
     if not flag:
         return
@@ -157,11 +170,25 @@ async def answer_task(obj, state: FSMContext):
     user = await db.get_user(obj.from_user.id)
     task = await db.get_task(user.task)
 
+    if not task:
+        cats = await db.get_categories()
+
     if isinstance(obj, types.Message):
-        await obj.answer(f"Ваше текущее задание:\n\n{task.text}\n\nДля подтверждения выполнения задания отправьте медиа/документы/текстовое описание <b>Одним Сообщением</b>", reply_markup=answer_kb())
+        if task:
+            await obj.answer(f"Ваше текущее задание:\n\n{task.text}\n\nДля подтверждения выполнения задания отправьте медиа/документы/текстовое описание <b>Одним Сообщением</b>", reply_markup=answer_kb())
+        else:
+            await obj.answer('Для начала, получите задание')
+            await obj.answer(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
     elif isinstance(obj, types.CallbackQuery):
-        await obj.answer(f"Ваше текущее задание:\n\n{task.text}\n\nДля подтверждения выполнения задания отправьте медиа/документы/текстовое описание <b>Одним Сообщением</b>", reply_markup=answer_kb())
-        await obj.answer()
+        if task:
+            await obj.answer(f"Ваше текущее задание:\n\n{task.text}\n\nДля подтверждения выполнения задания отправьте медиа/документы/текстовое описание <b>Одним Сообщением</b>", reply_markup=answer_kb())
+            await obj.answer()
+        else:
+            await obj.message.edit_text(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
+            await obj.answer('Для начала, получите задание')
+    
+    if task:
+        await state.set_state(TaskState.answer)
 
 
 @tasks_router.message(state=TaskState.answer)
