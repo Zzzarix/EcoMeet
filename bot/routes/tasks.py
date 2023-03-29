@@ -101,7 +101,7 @@ async def categories(obj):
             await obj.answer()
 
 
-@tasks_router.callback_query(startswith='tasks:new:')
+@tasks_router.callback_query(text_startswith='tasks:new:')
 async def tasks(call: types.CallbackQuery):
     flag = await check_user(call.from_user.id)
     if not flag:
