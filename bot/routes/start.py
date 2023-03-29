@@ -18,17 +18,19 @@ from ..misc.keyboards import (
 start_router = Router()
 
 
-@start_router.message(content_types=[ContentType.CONTACT])
+@start_router.message(state=SignUpState.phone)
 async def signup(m: types.Message, state: FSMContext):
     user = await db.get_user(m.from_user.id)
     if not user:
         await m.answer("Пожалуйста, начните работу с ботом с команды /start :)")
         return
-    if not user.phone:
+    if m.contact:
         user.phone = m.contact.phone_number
         await db.update_user(user)
         await m.answer(await db.get_message('enter_name'), reply_markup=clear_kb())
         await state.set_state(SignUpState.name)
+    else:
+        await m.answer('Нажмите, пожалуйста на кнопку отправить контакт под клавиатурой, чтобы продолжить')
 
 @start_router.message(state=SignUpState.name)
 async def name(m: types.Message, state: FSMContext):
