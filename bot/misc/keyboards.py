@@ -13,13 +13,13 @@ def signup_kb() -> ReplyKeyboardMarkup:
     kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)
 
-def menu_kb(can_choose_task: bool) -> InlineKeyboardMarkup:
+def menu_kb(cant_choose_task: bool) -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
-    if can_choose_task:
-        kb.row(InlineKeyboardButton(text='Выбрать задание', callback_data='tasks:new'))
-    else:
+    if cant_choose_task:
         kb.row(InlineKeyboardButton(text='Выбранное задание', callback_data='tasks:current'))
         kb.row(InlineKeyboardButton(text='Завершить задание', callback_data='tasks:answer'))
+    else:
+        kb.row(InlineKeyboardButton(text='Выбрать задание', callback_data='tasks:new'))
     kb.row(InlineKeyboardButton(text='Ваш профиль', callback_data='profile'))
     return kb.as_markup()
 
