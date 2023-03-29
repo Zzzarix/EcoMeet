@@ -17,7 +17,7 @@ class MongoStorage(BaseStorage):
 
     async def get_state(self, bot: Bot, key: StorageKey) -> Optional[str]:
         res = await self.db.FSMStorage.find_one({'_id': key.user_id})
-        return res.get('state', None)
+        return res.get('state', None) if res else None
 
     async def set_data(self, bot: Bot, key: StorageKey, data: Dict[str, Any]) -> None:
         if not await self.db.FSMStorage.find_one({'_id': key.user_id}):
@@ -27,7 +27,7 @@ class MongoStorage(BaseStorage):
 
     async def get_data(self, bot: Bot, key: StorageKey) -> Dict[str, Any]:
         res = await self.db.FSMStorage.find_one({'_id': key.user_id})
-        return res.get('data', {})
+        return res.get('data', {}) if res else {}
 
     async def close(self) -> None:
         _client.close()
