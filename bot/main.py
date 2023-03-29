@@ -4,11 +4,11 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
 import logging as logger
 
-from config import config
-from db.base import check_db_conn, close_db_conn
-from routes import register_all_routes
-from webhooks import start_webhook, CERTIFICATE, WEBHOOK_URL
-from misc.storage import MongoStorage
+from .config import config
+from .db.base import check_db_conn, close_db_conn
+from .routes import register_all_routes
+from .webhooks import start_webhook, CERTIFICATE, WEBHOOK_URL
+from .misc.storage import MongoStorage
 
 
 async def on_startup(dispatcher: Dispatcher, bot: Bot):
