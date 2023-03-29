@@ -2,7 +2,6 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
-from aiohttp import AiohttpSession
 import logging as logger
 
 from .config import config
@@ -52,7 +51,7 @@ def main():
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
-    bot = Bot(token=config['bot']['token'], parse_mode='HTML', session=AiohttpSession())
+    bot = Bot(token=config['bot']['token'], parse_mode='HTML')
 
     start_webhook(dp, bot)
 
