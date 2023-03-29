@@ -1,6 +1,3 @@
-import asyncio
-import logging as logger
-
 from aiogram import types, Dispatcher, Bot
 from aiogram.webhook.aiohttp_server import setup_application, SimpleRequestHandler
 from aiohttp.web import Application, run_app
