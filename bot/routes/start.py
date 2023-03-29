@@ -127,7 +127,3 @@ async def start_command(m: types.Message, state: FSMContext, bot: Bot) -> None:
         user = await db.create_user(m.from_user.id)
 
         await m.answer(await db.get_message('signup'), reply_markup=signup_kb())
-
-@start_router.message()
-async def cap(m: types.Message):
-    await m.answer('Я не знаю такой команды, попробуйте ещё раз')
