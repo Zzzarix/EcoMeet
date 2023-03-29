@@ -1,7 +1,7 @@
 from ..config import config
 
 WEBAPP_HOST = '0.0.0.0'
-WEBAPP_PORT = 49344
+WEBAPP_PORT = 8443
 
 WEBHOOK_HOST = 'http://188.225.83.42'
 WEBHOOK_PATH = f"/ecoMeet/webhook/{config['bot']['token']}"
