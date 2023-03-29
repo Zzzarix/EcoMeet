@@ -20,5 +20,4 @@ def start_webhook(dp: Dispatcher, bot: Bot) -> None:
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     context.load_cert_chain(CERT_PATH, CERT_KEY_PATH)
 
-    logging.info(list(app.router.items()))
     run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
