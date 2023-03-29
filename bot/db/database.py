@@ -9,7 +9,7 @@ class Database:
     
     async def get_message(self, key: str) -> str:
         res = await self._db.messages.find_one({'_id': key})
-        return res.get('text', key)
+        return res.get('text', key) if res else key
 
     async def create_user(self, id: int) -> User:
         user = User(_id=id)
