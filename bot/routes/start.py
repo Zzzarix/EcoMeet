@@ -118,9 +118,8 @@ async def email(m: types.Message, state: FSMContext):
 
 @start_router.message(CommandStart())
 async def start_command(m: types.Message, state: FSMContext, bot: Bot) -> None:
-    flag = await check_user(m.from_user.id)
-    if flag:
-        user = await db.get_user(m.from_user.id)
+    user = await db.get_user(m.from_user.id)
+    if user:
         await m.answer((await db.get_message('menu')).format(user.name), reply_markup=menu_kb())
         await state.clear()
     else:
