@@ -10,7 +10,7 @@ from .webhooks import start_webhook, CERTIFICATE, WEBHOOK_URL
 from .misc.storage import MongoStorage
 
 
-async def on_startup(dp: Dispatcher, bot: Bot):
+async def on_startup(dispatcher: Dispatcher, bot: Bot):
     logger.basicConfig(
         level=logger.INFO,
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
@@ -21,7 +21,7 @@ async def on_startup(dp: Dispatcher, bot: Bot):
 
     await check_db_conn()
 
-    register_all_routes(dp)
+    register_all_routes(dispatcher)
 
     await bot.set_my_commands([
         BotCommand(command='/start', description='Начать сначала'),
@@ -41,10 +41,10 @@ async def on_startup(dp: Dispatcher, bot: Bot):
         logger.fatal('Webhook not set')
 
 
-async def on_shutdown(dp: Dispatcher, bot: Bot):
+async def on_shutdown(dispatcher: Dispatcher, bot: Bot):
     logger.info('Shutting down bot')
     await bot.delete_webhook(drop_pending_updates=True)
-    await dp.storage.close()
+    await dispatcher.storage.close()
     await bot.session.close()
     close_db_conn()
 
