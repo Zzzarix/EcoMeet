@@ -123,7 +123,7 @@ async def tasks(call: types.CallbackQuery):
             user.task = t.id
             await db.update_user(user)
             
-            await call.message.edit_text(f"Вы выбрали задание:\n\n{t.text}", reply_markup=task_chose_kb())
+            await call.message.edit_text(f"Ваше новое задание:\n\n{t.text}", reply_markup=task_chose_kb())
             await call.answer()
             return
 
@@ -203,7 +203,7 @@ async def answer_task(m: types.Message, state: FSMContext, bot: Bot):
     for admin in config['bot']['admins']:
         try:
             text = f'Результат выполнения задания\n\n<i>{task.text}</i>\n\n'
-            text += f'id {user.id}\nusername {m.from_user.username}\nФИО {user.name} {user.last_name} {user.patronymic}\n'
+            text += f'id {user.id}\nusername @{m.from_user.username}\nФИО {user.name} {user.last_name} {user.patronymic}\n'
             
             birth = user.birth.strftime('%Y.%m.%d')
             
