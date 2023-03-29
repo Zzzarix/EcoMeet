@@ -10,7 +10,8 @@ from .misc.storage import MongoStorage
 
 
 async def on_startup(dispatcher: Dispatcher, bot: Bot):
-    logger.info('Starting bot')
+    me = await bot.me()
+    logger.info(f'Starting bot as {me.username}')
 
     await check_db_conn()
 
