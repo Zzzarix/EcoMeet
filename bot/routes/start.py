@@ -107,7 +107,7 @@ async def email(m: types.Message, state: FSMContext):
     if m.text.startswith('/'):
         await m.answer("Пожалуйста, закончите регистрацию перед дальнейшим использованием бота")
         
-    if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", email):
+    if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", m.text):
         await m.answer("Некорректный адрес электронной почты, попробуйте ещё раз")
         return
     
