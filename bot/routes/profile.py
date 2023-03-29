@@ -1,6 +1,5 @@
 from aiogram import types, Bot, Router
 from aiogram.filters.command import Command
-from ..replies import replies
 from ..utils import check_user
 
 from ..misc.keyboards import (
