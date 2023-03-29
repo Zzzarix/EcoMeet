@@ -113,8 +113,8 @@ async def email(m: types.Message, state: FSMContext):
     
     user.email = m.text
     await db.update_user(user)
-    await m.answer(await db.get_message('menu'))
-    await state.set_state(SignUpState.patronymic)
+    await m.answer(await db.get_message('menu'), reply_markup=menu_kb(user.task))
+    await state.set_state(None)
 
 @start_router.message(CommandStart())
 async def start_command(m: types.Message, state: FSMContext, bot: Bot) -> None:
