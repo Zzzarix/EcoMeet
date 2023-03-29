@@ -3,6 +3,8 @@ from aiogram.webhook.aiohttp_server import setup_application, SimpleRequestHandl
 from aiohttp.web import Application, run_app
 import ssl
 
+import logging
+
 from .webhook import WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT, CERT_KEY_PATH, CERT_PATH
 # from .payments import _payment_webhook_handler
 
@@ -18,4 +20,5 @@ def start_webhook(dp: Dispatcher, bot: Bot) -> None:
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     context.load_cert_chain(CERT_PATH, CERT_KEY_PATH)
 
+    logging.info(list(app.router.items()))
     run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
