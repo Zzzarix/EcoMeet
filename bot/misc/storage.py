@@ -11,9 +11,9 @@ class MongoStorage(BaseStorage):
 
     async def set_state(self, bot: Bot, key: StorageKey, state: StateType = None) -> None:
         if not await self.db.FSMStorage.find_one({'_id': key.user_id}):
-            await self.db.FSMStorage.insert_one({'_id': key.user_id, 'state': state.state, 'data': {}})
+            await self.db.FSMStorage.insert_one({'_id': key.user_id, 'state': state.state if state else None, 'data': {}})
         else:
-            await self.db.FSMStorage.update_one({'_id': key.user_id}, {'$set': {'state': state.state}})
+            await self.db.FSMStorage.update_one({'_id': key.user_id}, {'$set': {'state': state.state  if state else None}})
 
     async def get_state(self, bot: Bot, key: StorageKey) -> Optional[str]:
         res = await self.db.FSMStorage.find_one({'_id': key.user_id})
@@ -21,9 +21,9 @@ class MongoStorage(BaseStorage):
 
     async def set_data(self, bot: Bot, key: StorageKey, data: Dict[str, Any]) -> None:
         if not await self.db.FSMStorage.find_one({'_id': key.user_id}):
-            await self.db.FSMStorage.insert_one({'_id': key.user_id, 'state': None, 'data': data})
+            await self.db.FSMStorage.insert_one({'_id': key.user_id, 'state': None, 'data': data if data else {}})
         else:
-            await self.db.FSMStorage.update_one({'_id': key.user_id}, {'$set': {'data': data}})
+            await self.db.FSMStorage.update_one({'_id': key.user_id}, {'$set': {'data': data if data else {}}})
 
     async def get_data(self, bot: Bot, key: StorageKey) -> Dict[str, Any]:
         res = await self.db.FSMStorage.find_one({'_id': key.user_id})
