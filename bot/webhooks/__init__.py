@@ -18,8 +18,8 @@ def start_webhook(dp: Dispatcher, bot: Bot) -> None:
     SimpleRequestHandler(dp, bot, handle_in_background=True).register(app, WEBHOOK_PATH)
 
     # app.router.add_post('/AAFrDOcFUcCywfKh_wdFv9Q-8HrxGLrz49I', _payment_webhook_handler)
-    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    # context.load_cert_chain(CERT_PATH, CERT_KEY_PATH)
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.load_cert_chain(CERT_PATH, CERT_KEY_PATH)
 
-    # run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
+    run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
     run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
