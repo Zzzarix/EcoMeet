@@ -160,7 +160,7 @@ class User(_Document):
         self._payload['phone'] = value
     
 
-    property
+    @property
     def email(self) -> str:
         return self._payload['email']
 
