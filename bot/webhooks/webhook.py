@@ -1,6 +1,6 @@
 from ..config import config
 
-WEBAPP_HOST = '188.225.83.42'
+WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 8443
 
 WEBHOOK_HOST = f'https://188.225.83.42:8443'
