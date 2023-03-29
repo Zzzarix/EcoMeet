@@ -1,5 +1,6 @@
 from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
+from aiogram.client.session.aiohttp import AiohttpSession
 import logging as logger
 
 from .config import config
@@ -9,11 +10,18 @@ from .webhooks import start_webhook, CERTIFICATE, WEBHOOK_URL
 from .misc.storage import MongoStorage
 
 
-async def on_startup(dispatcher: Dispatcher, bot: Bot):
+async def on_startup(dp: Dispatcher, bot: Bot):
+    logger.basicConfig(
+        level=logger.INFO,
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    )
+
     me = await bot.me()
     logger.info(f'Starting bot as {me.username}')
 
     await check_db_conn()
+
+    register_all_routes(dp)
 
     await bot.set_my_commands([
         BotCommand(command='/start', description='Начать сначала'),
@@ -22,35 +30,33 @@ async def on_startup(dispatcher: Dispatcher, bot: Bot):
         BotCommand(command='/tasks', description='Выбрать задание'),
     ])
 
-    await bot.set_webhook(
+    flag = await bot.set_webhook(
         url=WEBHOOK_URL,
         certificate=CERTIFICATE
     )
 
+    if flag:
+        logger.info(f'Webhok set succesfully')
+    else:
+        logger.fatal('Webhook not set')
 
-async def on_shutdown(dispatcher: Dispatcher, bot: Bot):
+
+async def on_shutdown(dp: Dispatcher, bot: Bot):
     logger.info('Shutting down bot')
     await bot.delete_webhook(drop_pending_updates=True)
-    await dispatcher.storage.close()
+    await dp.storage.close()
     await bot.session.close()
     close_db_conn()
 
 
 def main():
-    logger.basicConfig(
-        level=logger.INFO,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-    )
-
     storage = MongoStorage()
     dp = Dispatcher(storage=storage)
-
-    register_all_routes(dp)
 
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
-    bot = Bot(token=config['bot']['token'], parse_mode='HTML')
+    bot = Bot(token=config['bot']['token'], parse_mode='HTML', session=AiohttpSession())
 
     start_webhook(dp, bot)
 
