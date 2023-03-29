@@ -114,7 +114,7 @@ async def tasks(call: types.CallbackQuery):
     tasks = await db.get_tasks(int(cat))
 
 
-    tasks = random.shuffle(tasks)
+    random.shuffle(tasks)
     for t in tasks:
         if t in user.completed_tasks:
             continue
