@@ -32,16 +32,15 @@ def categories_kb(categories: list[Category]) -> InlineKeyboardMarkup:
     kb.adjust(1)
     return kb.as_markup()
 
-# def tasks_kb(tasks: list[Task]) -> InlineKeyboardMarkup:
-#     kb = InlineKeyboardBuilder()
-#     for t in tasks:
-#         kb.add(InlineKeyboardButton(text=t.text, callback_data=f'tasks:new:{t.category}:{t.id}'))
-#     kb.add(InlineKeyboardButton(text='Вернуться в меню', callback_data='tasks'))
-#     kb.adjust(1)
-#     return kb.as_markup()
-
-def task_choosed_kb() -> InlineKeyboardMarkup:
+def task_chose_kb() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
+    kb.add(InlineKeyboardButton(text='Вернуться в меню', callback_data='tasks'))
+    kb.adjust(1)
+    return kb.as_markup()
+
+def task_not_chose_kb() -> InlineKeyboardMarkup:
+    kb = InlineKeyboardBuilder()
+    kb.add(InlineKeyboardButton(text='Обратно к категориям', callback_data='tasks:new'))
     kb.add(InlineKeyboardButton(text='Вернуться в меню', callback_data='tasks'))
     kb.adjust(1)
     return kb.as_markup()
@@ -61,6 +60,7 @@ def answer_kb() -> InlineKeyboardMarkup:
 
 def current_task_kb() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
+    kb.add(InlineKeyboardButton(text='Выполнить задание', callback_data='tasks:answer'))
     kb.add(InlineKeyboardButton(text='Вернуться в меню', callback_data='tasks'))
     kb.adjust(1)
     return kb.as_markup()

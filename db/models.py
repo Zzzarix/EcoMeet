@@ -77,8 +77,10 @@ class User(_Document):
     phone: str
     points: int
     task: int
+    birth: datetime.datetime
+    completed_tasks: list[int]
 
-    def __init__(self, *, _id: int, name: str = '', phone: str = '', last_name: str = '', patronymic: str = '', email: str = None, points: int = 0, task: int = None, **kwargs) -> None:
+    def __init__(self, *, _id: int, name: str = '', phone: str = '', last_name: str = '', patronymic: str = '', email: str = None, points: int = 0, task: int = None, completed_tasks: list[int] = [], birth: int = None, **kwargs) -> None:
         super().__init__()
         self._payload['_id'] = _id
         self._payload['name'] = name
@@ -88,6 +90,30 @@ class User(_Document):
         self._payload['email'] = email
         self._payload['points'] = points
         self._payload['task'] = task
+
+        if birth:
+            self._birth = datetime.datetime.fromtimestamp(birth)
+
+        self._payload['birth'] = birth
+
+        self._payload['completed_tasks'] = completed_tasks
+    
+    @property
+    def birth(self):
+        return self._birth
+
+    @birth.setter
+    def birth(self, value: datetime.datetime):
+        self._birth = value
+        self._payload['birth'] = value.timestamp()
+    
+    @property
+    def completed_tasks(self):
+        return self._payload['completed_tasks']
+    
+    def complete_task(self):
+        self._payload['completed_tasks'].append(self.task)
+        self.task = None
 
     @property
     def last_name(self):

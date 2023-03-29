@@ -7,3 +7,6 @@ class SignUpState(StatesGroup):
     patronymic = State()
     birth_date = State()
     email = State()
+
+class TaskState(StatesGroup):
+    answer = State()

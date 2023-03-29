@@ -72,7 +72,8 @@ async def patronymic(m: types.Message, state: FSMContext):
     
     user.patronymic = m.text
     await db.update_user(user)
-    await m.answer(await db.get_message('enter_birth'))
+    # await m.answer(await db.get_message('enter_birth'))
+    await m.answer(await db.get_message('Введите дату рождения в формате год.месяц.день'))
     await state.set_state(SignUpState.birth_date)
 
 @start_router.message(state=SignUpState.birth_date)
@@ -88,7 +89,7 @@ async def birth_date(m: types.Message, state: FSMContext):
     try:
         date = datetime.datetime.strptime(m.text, '%Y.%m.%d')
     except Exception:
-        await m.answer(await db.get_message('settings.enter.birth.error'))
+        await m.answer(await db.get_message('enter_birth_error'))
     else:
         user = await db.get_user(m.from_user.id)
         user.birth = date
