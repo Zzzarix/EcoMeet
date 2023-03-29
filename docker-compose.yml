@@ -18,6 +18,8 @@ services:
     build: .
     depends_on:
       - mongo
+    ports:
+      - "8443:8443"
 
 volumes:
   mongo:
