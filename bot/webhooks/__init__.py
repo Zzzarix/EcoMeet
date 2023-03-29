@@ -19,4 +19,3 @@ def start_webhook(dp: Dispatcher, bot: Bot) -> None:
     context.load_cert_chain(CERT_PATH, CERT_KEY_PATH)
 
     run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
-    run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
