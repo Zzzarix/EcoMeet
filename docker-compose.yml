@@ -6,8 +6,8 @@ services:
     image: mongo:latest
     command: mongod --quiet
     environment:
-      MONGO_INITDB_ROOT_USERNAME: 'root'
-      MONGO_INITDB_ROOT_PASSWORD: 'root'
+      MONGO_INITDB_ROOT_USERNAME: 'xaLsNzV2ri'
+      MONGO_INITDB_ROOT_PASSWORD: 'HHEt1MLgCX'
     volumes:
       - mongo:/data/db
     ports:
