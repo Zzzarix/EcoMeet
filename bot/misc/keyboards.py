@@ -20,7 +20,7 @@ def menu_kb(cant_choose_task: bool) -> InlineKeyboardMarkup:
         kb.row(InlineKeyboardButton(text='Завершить задание', callback_data='tasks:answer'))
     else:
         kb.row(InlineKeyboardButton(text='Выбрать задание', callback_data='tasks:new'))
-    kb.row(InlineKeyboardButton(text='Ваш профиль', callback_data='profile'))
+    kb.row(InlineKeyboardButton(text='Профиль', callback_data='profile'))
     return kb.as_markup()
 
 
