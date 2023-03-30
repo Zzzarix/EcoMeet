@@ -47,7 +47,6 @@ def task_not_chose_kb() -> InlineKeyboardMarkup:
 
 def profile_kb() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
-    kb.add(InlineKeyboardButton(text='Ваши забронированные сеансы', callback_data='booking:list'))
     kb.add(InlineKeyboardButton(text='Вернуться в меню', callback_data='tasks'))
     kb.adjust(1)
     return kb.as_markup()
@@ -60,7 +59,7 @@ def answer_kb() -> InlineKeyboardMarkup:
 
 def current_task_kb() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
-    kb.add(InlineKeyboardButton(text='Выполнить задание', callback_data='tasks:answer'))
+    kb.add(InlineKeyboardButton(text='Завершить задание', callback_data='tasks:answer'))
     kb.add(InlineKeyboardButton(text='Вернуться в меню', callback_data='tasks'))
     kb.adjust(1)
     return kb.as_markup()

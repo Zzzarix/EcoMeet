@@ -41,8 +41,13 @@ async def name(m: types.Message, state: FSMContext):
     
     if m.text.startswith('/'):
         await m.answer("Пожалуйста, закончите регистрацию перед дальнейшим использованием бота")
+        return
     
-    user.name = m.text
+    if not m.text:
+        await m.answer("Пожалуйста, вводите данные текстом")
+        return
+    
+    user.name = m.text.title()
     await db.update_user(user)
     await m.answer(await db.get_message('enter_last_name'))
     await state.set_state(SignUpState.last_name)
@@ -56,8 +61,13 @@ async def last_name(m: types.Message, state: FSMContext):
     
     if m.text.startswith('/'):
         await m.answer("Пожалуйста, закончите регистрацию перед дальнейшим использованием бота")
+        return
     
-    user.last_name = m.text
+    if not m.text:
+        await m.answer("Пожалуйста, вводите данные текстом")
+        return
+    
+    user.last_name = m.text.title()
     await db.update_user(user)
     await m.answer(await db.get_message('enter_patronymic'))
     await state.set_state(SignUpState.patronymic)
@@ -71,11 +81,15 @@ async def patronymic(m: types.Message, state: FSMContext):
     
     if m.text.startswith('/'):
         await m.answer("Пожалуйста, закончите регистрацию перед дальнейшим использованием бота")
+        return
     
-    user.patronymic = m.text
+    if not m.text:
+        await m.answer("Пожалуйста, вводите данные текстом")
+        return
+    
+    user.patronymic = m.text.title()
     await db.update_user(user)
-    # await m.answer(await db.get_message('enter_birth'))
-    await m.answer(await db.get_message('Введите дату рождения в формате год.месяц.день'))
+    await m.answer(await db.get_message('enter_birth'))
     await state.set_state(SignUpState.birth_date)
 
 @start_router.message(state=SignUpState.birth_date)
@@ -87,6 +101,11 @@ async def birth_date(m: types.Message, state: FSMContext):
     
     if m.text.startswith('/'):
         await m.answer("Пожалуйста, закончите регистрацию перед дальнейшим использованием бота")
+        return
+    
+    if not m.text:
+        await m.answer("Пожалуйста, вводите данные текстом")
+        return
     
     try:
         date = datetime.datetime.strptime(m.text, '%Y.%m.%d')
@@ -108,12 +127,17 @@ async def email(m: types.Message, state: FSMContext):
     
     if m.text.startswith('/'):
         await m.answer("Пожалуйста, закончите регистрацию перед дальнейшим использованием бота")
+        return
+    
+    if not m.text:
+        await m.answer("Пожалуйста, вводите данные текстом")
+        return
         
     if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", m.text):
         await m.answer("Некорректный адрес электронной почты, попробуйте ещё раз")
         return
     
-    user.email = m.text
+    user.email = m.text.lower()
     await db.update_user(user)
     await m.answer(await db.get_message('menu'), reply_markup=menu_kb(user.task))
     await state.set_state(None)

@@ -4,7 +4,6 @@ from ..utils import check_user
 
 from ..misc.keyboards import (
     profile_kb,
-    referal_kb,
     
 )
 from ..db.database import db
@@ -21,51 +20,18 @@ async def profile(obj):
 
     user = await db.get_user(obj.from_user.id)
 
-    if isinstance(obj, types.Message):
-        # await obj.answer(replies['profile']['profile'].format(user.id, user.name, '\\'+user.phone if user.phone.startswith('+') else user.phone, user.points, ref_text), reply_markup=profile_kb())
-        await obj.answer(replies['profile']['profile'].format(user.id, user.name, user.phone, user.points), reply_markup=profile_kb())
-    elif isinstance(obj, types.CallbackQuery):
-        # await obj.message.edit_text(replies['profile']['profile'].format(user.id, user.name, '\\'+user.phone if user.phone.startswith('+') else user.phone, user.points, ref_text), reply_markup=profile_kb())
-        await obj.message.edit_text(replies['profile']['profile'].format(user.id, user.name, user.phone, user.points), reply_markup=profile_kb())
+    text += f'id {user.id}\nusername @{obj.from_user.username}\n\nФИО {user.name} {user.last_name} {user.patronymic}\n'
+            
+    birth = user.birth.strftime('%Y.%m.%d')
+    
+    text += f'Дата рождения {birth}\nEmail {user.email}\n\n'
 
-        await obj.answer()
+    text += f'Выполнено заданий {len(user.completed_tasks)}' if user.completed_tasks else 'Вы пока не выполнили ни одного задания'
 
-@profile_router.message(Command(commands='referal', commands_ignore_case=True))
-@profile_router.callback_query(text='profile:referal')
-async def referal(obj, bot: Bot):
-    flag = await check_user(obj.from_user.id)
-    if not flag:
-        return
-
-    user = await db.get_user(obj.from_user.id)
-
-    me = await bot.me()
-    # ref_link = f"<a href=\"https://t.me/{me.username}?start={user.id}\">ссылка</a>"
-    ref_link = f"`https://t.me/{me.username}?start={user.id} `"
-    ref_text = ''
-
-    if not len(user.referals_ids):
-        ref_text = f'Вот ваша ссылка, нажми, чтобы скопировать {ref_link}'
-
-    elif 9 < len(user.referals_ids) % 100 < 22:
-        ref_text = f"Ты уже пригласил {len(user.referals_ids)} человек\nВот ваша ссылка, нажми, чтобы скопировать {ref_link}"
-    elif 1 <= len(user.referals_ids) % 10 < 5:
-        ref_text = f"Ты уже пригласил {len(user.referals_ids)} человека\nВот ваша ссылка, нажми, чтобы скопировать {ref_link}"
-    else:
-        ref_text = f"Ты уже пригласил {len(user.referals_ids)} человек\nВот ваша ссылка, нажми, чтобы скопировать {ref_link}"
-
-    try:
-        if user.referer_id:
-            referer_chat = await bot.get_chat(user.referer_id)
-            ref_text += f'\nВас пригласил @{referer_chat.username}\n\n'
-    except Exception:
-        pass
+    text += f'Ваши быллы: <i>{user.points}</i>' if user.completed_tasks else 'У вас пока нет ни одного балла, но не расстраивайтесь! Вы получите их, выполнив парочку <b>несложных, но полезных для окружающей среды</b> заданий😁!'
 
     if isinstance(obj, types.Message):
-        # await obj.answer(replies['profile']['profile'].format(user.id, user.name, '\\'+user.phone if user.phone.startswith('+') else user.phone, user.points, ref_text), reply_markup=profile_kb())
-        await obj.answer(replies['profile']['referal'].format(ref_text), reply_markup=referal_kb(), parse_mode='MarkdownV2')
+        await obj.answer(text, reply_markup=profile_kb())
     elif isinstance(obj, types.CallbackQuery):
-        # await obj.message.edit_text(replies['profile']['profile'].format(user.id, user.name, '\\'+user.phone if user.phone.startswith('+') else user.phone, user.points, ref_text), reply_markup=profile_kb())
-        await obj.message.edit_text(replies['profile']['referal'].format(ref_text), reply_markup=referal_kb(), parse_mode='MarkdownV2')
-
+        await obj.message.edit_text(text, reply_markup=profile_kb())
         await obj.answer()
