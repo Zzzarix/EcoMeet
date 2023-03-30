@@ -148,7 +148,7 @@ async def current_task(obj, state: FSMContext):
         if task:
             await obj.answer(f"Ваше текущее задание:\n\n<i>{task.text}</i>\n\nЗа него вы получите {task.points} баллов", reply_markup=current_task_kb())
         else:
-            await obj.answer('У вас пока нет заданий!')
+            await obj.edit_text('У вас пока нет заданий!')
             await obj.answer(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
     elif isinstance(obj, types.CallbackQuery):
         if task:
@@ -177,7 +177,7 @@ async def answer_task(obj, state: FSMContext):
         if task:
             await obj.answer(f"Ваше текущее задание:\n\n{task.text}\n\nДля подтверждения выполнения задания отправьте медиа/документы/текстовое описание <b>Одним Сообщением</b>", reply_markup=answer_kb())
         else:
-            await obj.message.edit_text('У вас пока нет заданий!', reply_markup=None)
+            await obj.edit_text('У вас пока нет заданий!', reply_markup=None)
             await obj.answer(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
     elif isinstance(obj, types.CallbackQuery):
         if task:
