@@ -31,9 +31,9 @@ async def menu(obj, state: FSMContext):
     user = await db.get_user(obj.from_user.id)
     
     if isinstance(obj, types.Message):
-        await obj.answer((await db.get_message('menu')).format(user.name), reply_markup=menu_kb(user.task))
+        await obj.answer((await db.get_message('menu')).format(name=user.name), reply_markup=menu_kb(user.task))
     elif isinstance(obj, types.CallbackQuery):
-        await obj.message.edit_text((await db.get_message('menu')).format(user.name), reply_markup=menu_kb(user.task))
+        await obj.message.edit_text((await db.get_message('menu')).format(name=user.name), reply_markup=menu_kb(user.task))
         await obj.answer()
 
 
@@ -91,12 +91,12 @@ async def categories(obj, state: FSMContext):
     if isinstance(obj, types.Message):
         if user.task:
             await obj.answer('Вы уже получили задание, сначала выполните его')
-            await obj.answer((await db.get_message('menu')).format(user.name), reply_markup=menu_kb(user.task))
+            await obj.answer((await db.get_message('menu')).format(name=user.name), reply_markup=menu_kb(user.task))
         else:
             await obj.answer(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
     elif isinstance(obj, types.CallbackQuery):
         if user.task:
-            await obj.message.edit_text((await db.get_message('menu')).format(user.name), reply_markup=menu_kb(user.task))
+            await obj.message.edit_text((await db.get_message('menu')).format(name=user.name), reply_markup=menu_kb(user.task))
             await obj.answer(text='Вы уже получили задание, сначала выполните его', show_alert=True)
         else:
             await obj.message.edit_text(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
@@ -215,6 +215,7 @@ async def answer_task(m: types.Message, state: FSMContext, bot: Bot):
             pass
 
     user.complete_task()
+    user.points += task.points
     await db.update_user(user)
 
     await state.set_state(None)

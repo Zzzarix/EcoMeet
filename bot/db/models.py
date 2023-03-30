@@ -48,16 +48,22 @@ class Task(_Document):
     id: int
     category: int
     text: str
+    points: int
 
-    def __init__(self, *, _id: int, category: int, text: str, **kwargs) -> None:
+    def __init__(self, *, _id: int, category: int, text: str, points: int, **kwargs) -> None:
         super().__init__()
         self._payload['_id'] = _id
         self._payload['category'] = category
         self._payload['text'] = text
+        self._payload['points'] = points
 
     @property
     def id(self):
         return self._payload['_id']
+    
+    @property
+    def points(self):
+        return self._payload['points']
     
     @property
     def category(self):

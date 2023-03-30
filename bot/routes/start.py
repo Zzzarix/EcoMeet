@@ -147,7 +147,7 @@ async def start_command(m: types.Message, state: FSMContext, bot: Bot) -> None:
     user = await db.get_user(m.from_user.id)
     await state.set_state(None)
     if user:
-        await m.answer((await db.get_message('menu')).format(user.name), reply_markup=menu_kb(user.task))
+        await m.answer((await db.get_message('menu')).format(name=user.name), reply_markup=menu_kb(user.task))
         await state.clear()
     else:
         await m.answer(await db.get_message('greeting'))
