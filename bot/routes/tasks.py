@@ -123,7 +123,7 @@ async def tasks(call: types.CallbackQuery):
             user.task = t.id
             await db.update_user(user)
             
-            await call.message.edit_text(f"Ваше новое задание:\n\n{t.text}", reply_markup=task_chose_kb())
+            await call.message.edit_text(f"Ваше новое задание:\n\n<i>{t.text}</i>\n\nЗа него вы получите {t.points} баллов", reply_markup=task_chose_kb())
             await call.answer()
             return
 
@@ -146,13 +146,13 @@ async def current_task(obj, state: FSMContext):
 
     if isinstance(obj, types.Message):
         if task:
-            await obj.answer(f"Ваше текущее задание:\n\n{task.text}", reply_markup=current_task_kb())
+            await obj.answer(f"Ваше текущее задание:\n\n<i>{task.text}</i>\n\nЗа него вы получите {task.points} баллов", reply_markup=current_task_kb())
         else:
             await obj.answer('У вас пока нет заданий!')
             await obj.answer(await db.get_message('choose_category'), reply_markup=categories_kb(cats))
     elif isinstance(obj, types.CallbackQuery):
         if task:
-            await obj.message.edit_text(f"Ваше текущее задание:\n\n{task.text}", reply_markup=current_task_kb())
+            await obj.message.edit_text(f"Ваше текущее задание:\n\n<i>{task.text}</i>\n\nЗа него вы получите {task.points} баллов", reply_markup=current_task_kb())
             await obj.answer()
         else:
             await obj.message.edit_text('У вас пока нет заданий!', reply_markup=None)
