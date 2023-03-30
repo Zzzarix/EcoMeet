@@ -1,7 +1,7 @@
 config = {
     'bot': {
         'token': '6081530202:AAEPM3vmrHIyFYG5k6VfSGaf4hdOCa2AsKY',
-        'admins': [945482940]
+        'admins': [945482940, 5136465154]
     },
 
     'db': {

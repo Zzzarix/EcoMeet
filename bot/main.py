@@ -16,6 +16,8 @@ async def on_startup(dispatcher: Dispatcher, bot: Bot):
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
     )
 
+    bot.get_chat
+
     me = await bot.me()
     logger.info(f'Starting bot as {me.username}')
 
