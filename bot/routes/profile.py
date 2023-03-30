@@ -20,6 +20,8 @@ async def profile(obj):
 
     user = await db.get_user(obj.from_user.id)
 
+    text = 'Ваш профиль\n\n'
+
     text += f'id {user.id}\nusername @{obj.from_user.username}\n\nФИО {user.name} {user.last_name} {user.patronymic}\n'
             
     birth = user.birth.strftime('%Y.%m.%d')
