@@ -139,7 +139,7 @@ async def email(m: types.Message, state: FSMContext):
     
     user.email = m.text.lower()
     await db.update_user(user)
-    await m.answer(await db.get_message('menu').format(name=user.name), reply_markup=menu_kb(user.task))
+    await m.answer((await db.get_message('menu')).format(name=user.name), reply_markup=menu_kb(user.task))
     await state.set_state(None)
 
 @start_router.message(CommandStart())
