@@ -72,22 +72,6 @@ class Task(_Document):
     @property
     def text(self):
         return self._payload['text']
-    
-
-__months = [
-    'Января',
-    'Февраля',
-    'Марта',
-    'Апреля',
-    'Мая',
-    'Июня',
-    'Июля',
-    'Августа',
-    'Сентября',
-    'Октября',
-    'Ноября',
-    'Декабря',
-]
 
 
 class User(_Document):
@@ -101,6 +85,21 @@ class User(_Document):
     task: int
     birth: datetime.datetime
     completed_tasks: list[int]
+
+    __months = [
+        'Января',
+        'Февраля',
+        'Марта',
+        'Апреля',
+        'Мая',
+        'Июня',
+        'Июля',
+        'Августа',
+        'Сентября',
+        'Октября',
+        'Ноября',
+        'Декабря',
+    ]
 
     def __init__(self, *, _id: int, name: str = '', phone: str = '', last_name: str = '', patronymic: str = '', email: str = None, points: int = 0, task: int = None, completed_tasks: list[int] = [], birth: int = None, **kwargs) -> None:
         super().__init__()
@@ -130,7 +129,7 @@ class User(_Document):
         self._payload['birth'] = value.timestamp()
 
     def format_birth(self) -> str:
-        return f'{self.birth.day} {__months[self.birth.month]} {self.birth.year} года'
+        return f'{self.birth.day} {self.__months[self.birth.month]} {self.birth.year} года'
     
     @property
     def completed_tasks(self):
