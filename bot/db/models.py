@@ -87,6 +87,7 @@ class User(_Document):
     completed_tasks: list[int]
 
     __months = [
+        '',
         'Января',
         'Февраля',
         'Марта',
