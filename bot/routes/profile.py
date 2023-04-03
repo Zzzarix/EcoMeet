@@ -24,7 +24,7 @@ async def profile(obj):
 
     text += f'id {user.id}\nusername @{obj.from_user.username}\n\nФИО {user.name} {user.last_name} {user.patronymic}\n'
             
-    birth = user.birth.strftime('%Y.%m.%d')
+    birth = user.format_birth()
     
     text += f'Дата рождения {birth}\nEmail {user.email}\n\n'
 

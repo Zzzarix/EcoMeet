@@ -72,6 +72,22 @@ class Task(_Document):
     @property
     def text(self):
         return self._payload['text']
+    
+
+__months = [
+    'Января',
+    'Февраля',
+    'Марта',
+    'Апреля',
+    'Мая',
+    'Июня',
+    'Июля',
+    'Августа',
+    'Сентября',
+    'Октября',
+    'Ноября',
+    'Декабря',
+]
 
 
 class User(_Document):
@@ -112,6 +128,9 @@ class User(_Document):
     def birth(self, value: datetime.datetime):
         self._birth = value
         self._payload['birth'] = value.timestamp()
+
+    def format_birth(self) -> str:
+        return f'{self.birth.day} {__months[self.birth.month]} {self.birth.year} года'
     
     @property
     def completed_tasks(self):

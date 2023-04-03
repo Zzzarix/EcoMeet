@@ -34,6 +34,12 @@ class Database:
         async for u in self._db.users.find():
             res.append(User(**u))
         return res
+
+    async def get_top_users(self, limit) -> list[User]:
+        res = []
+        async for u in self._db.users.find().sort([('points', -1)])[:limit]:
+            res.append(User(**u))
+        return res
     
     async def get_category(self, id: int) -> Category:
         res = await self._db.categories.find_one({'_id': id})

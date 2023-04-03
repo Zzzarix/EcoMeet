@@ -20,7 +20,9 @@ def menu_kb(cant_choose_task: bool) -> InlineKeyboardMarkup:
         kb.row(InlineKeyboardButton(text='Завершить задание', callback_data='tasks:answer'))
     else:
         kb.row(InlineKeyboardButton(text='Выбрать задание', callback_data='tasks:new'))
+    kb.row(InlineKeyboardButton(text='Рейтинг', callback_data='rating'))
     kb.row(InlineKeyboardButton(text='Профиль', callback_data='profile'))
+    kb.row(InlineKeyboardButton(text='Поддержка', url='https://t.me/magicaleks'))
     return kb.as_markup()
 
 
@@ -60,6 +62,12 @@ def answer_kb() -> InlineKeyboardMarkup:
 def current_task_kb() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
     kb.add(InlineKeyboardButton(text='Завершить задание', callback_data='tasks:answer'))
+    kb.add(InlineKeyboardButton(text='Вернуться в меню', callback_data='tasks'))
+    kb.adjust(1)
+    return kb.as_markup()
+
+def rating_kb() -> InlineKeyboardMarkup:
+    kb = InlineKeyboardBuilder()
     kb.add(InlineKeyboardButton(text='Вернуться в меню', callback_data='tasks'))
     kb.adjust(1)
     return kb.as_markup()

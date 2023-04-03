@@ -205,12 +205,31 @@ async def answer_task(m: types.Message, state: FSMContext, bot: Bot):
             text = f'Результат выполнения задания\n\n<i>{task.text}</i>\n\n'
             text += f'id {user.id}\nusername @{m.from_user.username}\nФИО {user.name} {user.last_name} {user.patronymic}\n'
             
-            birth = user.birth.strftime('%Y.%m.%d')
+            birth = user.format_birth()
             
-            text += f'Дата рождения {birth}\nEmail {user.email}'
+            text += f'Дата рождения {birth}\nEmail {user.email}\n\n'
+            
+            if m.text:
+                text += m.text
+            
+            elif m.audio:
+                await bot.send_audio(admin, types.InputMediaAudio(media=m.audio.file_id, caption=text))
+            
+            elif m.video:
+                await bot.send_video(admin, types.InputMediaVideo(media=m.audio.file_id, caption=text))
+            
+            elif m.audio:
+                await bot.send_audio(admin, types.InputMediaAudio(media=m.audio.file_id, caption=text))
+            
+            elif m.audio:
+                await bot.send_audio(admin, types.InputMediaAudio(media=m.audio.file_id, caption=text))
+            
+            elif m.audio:
+                await bot.send_audio(admin, types.InputMediaAudio(media=m.audio.file_id, caption=text))
 
-            await bot.send_message(admin, text)
-            await bot.forward_message(admin, user.id, m.message_id)
+            else:
+                await bot.send_message(admin, text)
+
         except Exception:
             pass
 

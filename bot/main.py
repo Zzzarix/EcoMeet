@@ -31,6 +31,7 @@ async def on_startup(dispatcher: Dispatcher, bot: Bot):
         BotCommand(command='/answer', description='Предоставить результаты выполенения задания'),
         BotCommand(command='/tasks', description='Выбрать задание'),
         BotCommand(command='/profile', description='Ваш профиль'),
+        BotCommand(command='/rating', description='Рейтинги лучших'),
     ])
 
     flag = await bot.set_webhook(
