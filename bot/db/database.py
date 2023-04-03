@@ -37,7 +37,9 @@ class Database:
 
     async def get_top_users(self, limit) -> list[User]:
         res = []
-        async for c, u in enumerate(self._db.users.find().sort([('points', -1)])):
+        c = 0
+        async for u in self._db.users.find().sort([('points', -1)]):
+            c += 1
             if c == limit:
                 break
             res.append(User(**u))
