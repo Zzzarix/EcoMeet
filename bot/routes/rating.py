@@ -25,14 +25,14 @@ async def rating(obj, state: FSMContext):
 
     rating = ''
 
-    for c, u in enumerate(users):
+    for c, u in enumerate(users, 1):
         if u.id == obj.from_user.id:
             rating += f'<b>{c}. {u.name} {u.last_name} <i>{u.points}</i></b>\n'
         else:
             rating += f'{c}. {u.name} {u.last_name} <b>{u.points}</b>\n'
     
     if isinstance(obj, types.Message):
-        await obj.answer(f'Топ-10 лучших:\n\n{rating}', reply_markup=rating_kb())
+        await obj.answer(f'🔥<b>Топ-10 лучших:</b>🔥\n\n{rating}', reply_markup=rating_kb())
     elif isinstance(obj, types.CallbackQuery):
-        await obj.message.edit_text(f'Топ-10 лучших:\n\n{rating}', reply_markup=rating_kb())
+        await obj.message.edit_text(f'🔥<b>Топ-10 лучших:</b>🔥\n\n{rating}', reply_markup=rating_kb())
         await obj.answer()

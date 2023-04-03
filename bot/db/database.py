@@ -38,7 +38,7 @@ class Database:
     async def get_top_users(self, limit) -> list[User]:
         res = []
         c = 0
-        async for u in self._db.users.find().sort([('points', -1)]):
+        async for u in self._db.users.find({'points': {'$gt': 0}}).sort([('points', -1)]):
             c += 1
             if c == limit:
                 break
